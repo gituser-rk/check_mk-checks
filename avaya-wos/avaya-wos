@@ -19,7 +19,7 @@ then
 	echo "P ${NAME} Online=${ONLINE};300;500|Unique24H=${UNIQUE24H};400;500"
 else
 	echo $RESULT
-	echo "Token abgelaufen"
+	echo "Token invalid"
     	#Generate a new Token
     	#Change credentials as set in WOS. A read-only Account in WOS is enough:
 	RESULT2=$(curl --silent --insecure --data 'client_id=check_mk&client_secret=CMKcmk1&grant_type=client_credentials' -X POST 'https://linux-wos:9443/oauth/token' --insecure)

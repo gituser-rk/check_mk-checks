@@ -1,0 +1,48 @@
+#!/bin/sh
+NAME="Avaya-WOS"
+#Plugin for extracting values from Avaya Wireless Orchestration System (WOS)
+#for Check_MK using the WOS JSON API
+#install to: /usr/lib/check_mk_agent/local/
+#and make a "Full scan" in Check_MK
+#Version 1.0
+#
+#Author: Ronny Kroehnert ronny.kroehnert@gmx.de
+
+URL="https://linux-wos:9443/api/v1/stations.json/count"
+TOKEN=`cat access_token`
+RESULT=$(curl --insecure -s $URL -H 'Authorization: Bearer '$TOKEN)
+if [ $RESULT ]
+then
+	#Extract values from JSON output and store in variables:
+	ONLINE=$(echo $RESULT | jq '.online')
+	UNIQUE24H=$(echo $RESULT | jq '.unique24hours')
+	echo "P ${NAME} Online=${ONLINE};300;500|Unique24H=${UNIQUE24H};400;500"
+else
+	echo $RESULT
+	echo "Token abgelaufen"
+    	#Generate a new Token
+    	#Change credentials as set in WOS. A read-only Account in WOS is enough:
+	RESULT2=$(curl --silent --insecure --data 'client_id=check_mk&client_secret=CMKcmk1&grant_type=client_credentials' -X POST 'https://linux-wos:9443/oauth/token' --insecure)
+	if [ $RESULT2 ]
+		then
+			#extract Token from JSON output:
+			TOKEN=$(echo $RESULT2 | jq -r '.access_token')
+			#store new Token in file:
+			echo $TOKEN > access_token
+			#on next call of this script the new Token will be used
+		else
+			echo $RESULT2
+			echo "Error during Token generation"
+	fi		
+fi
+
+#(JSON-)Output of "curl --insecure -s $URL -H 'Authorization: Bearer '$TOKEN"
+#{"access_token":"aa12500b-a82b-4812-8d50-13d81c1907d9","token_type":"bearer","expires_in":604799,"scope":"read"
+#
+#Thresholds as used for Check_MK:
+#ONLINE-WARNING=300
+#ONLINE-CRITICAL=500
+#UNIQUE24H-WARNING=400
+#UNIQUE24H-CRITICAL=500
+
+

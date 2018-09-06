@@ -5,6 +5,14 @@ Because there is no command line access to the WOS Appliance, the Check has to b
 The Token for accessing the WOS API is only for 7 days valid, thus we need to generate a new one inside the script when timed out.
 Actually we only retrieve two values: concurrent online WiFi users ("online") and unique users seen in last 24 hours ("unique24h").
 
+# Installation
+See instructions in script file (comments).
+
+Short:
+- install script in agent plugin script directory
+- make a discovery (full scan) in Check_MK for the host where the script is installed.
+- enjoy
+
 # ToDo:
 - more values
 - ...

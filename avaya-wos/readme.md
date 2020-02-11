@@ -14,5 +14,5 @@ Short:
 - enjoy
 
 # ToDo:
-- more values
-- ...
+- more values: i.e. count of APs or radios online/up
+

@@ -11,7 +11,7 @@ NAME="Avaya-WOS"
 # Author: Ronny Kroehnert ronny.kroehnert[at]gmx.de
 
 URL="https://linux-wos:9443/api/v1/stations.json/count"
-TOKEN=`cat access_token`
+TOKEN=`cat access_token` # token is stored in the file "access_token", located in the same directory as this script
 RESULT=$(curl --insecure -s $URL -H 'Authorization: Bearer '$TOKEN)
 if [ $RESULT ]
 then
@@ -33,7 +33,7 @@ else
                         #extract Token from JSON output:
                         TOKEN=$(echo $RESULT2 | jq -r '.access_token')
                         #store new Token in file:
-                        echo $TOKEN > access_token
+                        echo $TOKEN > access_token # token is stored in the file "access_token", located in the same directory as this script
                         #on next call of this script the new Token will be used
                 else
                         echo $RESULT2

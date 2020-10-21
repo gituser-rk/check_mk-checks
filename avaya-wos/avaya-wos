@@ -29,7 +29,7 @@ else
         echo "Token invalid"
         #Generate a new token
         #Change credentials as set in WOS. A read-only account in WOS is enough:
-        RESULT2=$(curl --silent --insecure --data 'client_id=check_mk&client_secret=CMKcmk1&grant_type=client_credentials' -X POST 'https://linux-wos:9443/oauth/token' --inse
+        RESULT2=$(curl --silent --insecure --data 'client_id=check_mk&client_secret=CMKcmk1&grant_type=client_credentials' -X POST 'https://linux-wos:9443/oauth/token' --insecure)
         if [ $RESULT2 ]
                 then
                         #extract Token from JSON output:

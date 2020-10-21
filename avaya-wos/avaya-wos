@@ -18,6 +18,8 @@ then
         #Extract values from JSON output and store in variables:
         ONLINE=$(echo $RESULT | jq '.online')
         UNIQUE24H=$(echo $RESULT | jq '.unique24hours')
+        #Output the data for CheckMK. "linux-wos" is the name of the WOS Server in CheckMK. 
+        #To assign the check to this host and not the host where the plugin is running, we use "piggyback"
         echo "<<<<linux-wos>>>>" #assign to different host (piggyback) BEGIN
         echo "<<<local>>>" #assign to different host (piggyback)
         echo "P ${NAME} Online=${ONLINE};300;500|Unique24H=${UNIQUE24H};400;500" # Plugin output
@@ -25,8 +27,8 @@ then
 else
         echo $RESULT
         echo "Token invalid"
-        #Generate a new Token
-        #Change credentials as set in WOS. A read-only Account in WOS is enough:
+        #Generate a new token
+        #Change credentials as set in WOS. A read-only account in WOS is enough:
         RESULT2=$(curl --silent --insecure --data 'client_id=check_mk&client_secret=CMKcmk1&grant_type=client_credentials' -X POST 'https://linux-wos:9443/oauth/token' --inse
         if [ $RESULT2 ]
                 then
